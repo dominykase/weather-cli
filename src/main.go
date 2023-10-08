@@ -7,6 +7,5 @@ import (
 
 func main() {
     fmt.Println(messages.WelcomeMsg);
-    
-    fmt.Println(messages.LocationsMsg);
+    fmt.Println(messages.CommandsMsg);
 }
