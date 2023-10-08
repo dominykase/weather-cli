@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Set the source and binary directories
 src_dir="src"
 bin_dir="bin"
 output_name="weather"
@@ -14,7 +13,7 @@ if [ ! -d "$bin_dir" ]; then
     mkdir -p "$bin_dir"
 fi
 
-go build -o "$bin_dir/$output_name" "$src_dir/main.go"
+go build -o "$bin_dir/$output_name" "./$src_dir"
 
 if [ $? -eq 0 ]; then
     echo "Compilation successful. Binary saved to '$bin_dir/$output_name'."
