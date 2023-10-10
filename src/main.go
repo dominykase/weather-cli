@@ -1,35 +1,47 @@
 package main
 
 import (
-    "fmt"
-    "weather/src/messages"
+	"bufio"
+	"fmt"
+	"os"
+	"weather/src/cmd"
+	"weather/src/messages"
+	"weather/src/utils"
 )
 
 func main() {
     var input string;
+    
+    reader := bufio.NewReader(os.Stdin)
 
+    fmt.Println(messages.WelcomeMsg)
+   
     for input != "exit" {
-        switch (input) {
-            case "":
-                fmt.Println(messages.WelcomeMsg);
-                break;
-            case "search": 
-                break;
-            case "daily":
-                break;
-            case "hourly":
-                break;
-            default:
-                fmt.Println(
-                    fmt.Sprintf(
-                        "\n\"%s\" is not a recognised input.\n\n",
-                        input,
-                    ),
-                );
-                break;
+        fmt.Println(messages.CommandsMsg)
+        input, stdinErr := reader.ReadString('\n')
+        
+        if stdinErr != nil {
+            panic("ERROR: something went wrong with input. Exiting.")
         }
 
-        fmt.Println(messages.CommandsMsg);
-        fmt.Scanln(&input);
+        command, location, err := utils.ParseCmdArgs(input);
+
+        if err != nil {
+            fmt.Println((*err).Message);
+
+            continue;
+        }
+
+        switch (command) {
+            case cmd.Search:
+                fmt.Println(location)
+                break;
+            case cmd.Daily:
+                break;
+            case cmd.Hourly:
+                break;
+            default:
+                break;
+        }
     }
 }
