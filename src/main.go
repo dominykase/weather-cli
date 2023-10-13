@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"weather/src/cmd"
+	httpclient "weather/src/httpClient"
 	"weather/src/messages"
 	"weather/src/utils"
 )
@@ -34,7 +35,16 @@ func main() {
 
         switch (command) {
             case cmd.Search:
-                fmt.Println(location)
+                cities, err := httpclient.GetCities(location)
+                
+                if err != nil {
+                    panic(err)
+                }
+
+                for _, city := range cities {
+                    fmt.Printf("%s (%s)\n", city.Name, city.Url)
+                }
+                fmt.Printf("\n")
                 break;
             case cmd.Daily:
                 break;
