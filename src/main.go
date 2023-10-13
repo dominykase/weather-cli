@@ -28,7 +28,7 @@ func main() {
         command, location, err := utils.ParseCmdArgs(input);
 
         if err != nil {
-            fmt.Println((*err).Message);
+            fmt.Println(err);
 
             continue;
         }
@@ -42,7 +42,7 @@ func main() {
                 }
 
                 for _, city := range cities {
-                    fmt.Printf("%s (%s)\n", city.Name, city.Url)
+                    fmt.Printf("\t%s (%s)\n", city.Name, city.Url)
                 }
                 fmt.Printf("\n")
                 break;

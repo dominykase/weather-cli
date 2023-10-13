@@ -2,6 +2,7 @@ package httpclient
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"os"
 	"strings"
@@ -24,19 +25,19 @@ func GetCities(cityInput string) ([]City, error) {
     resp, err := http.Get(BaseUrl + "/v1/search.json?key=" + apiKey + "&q=" + escapeNewLine(cityInput))
 
     if err != nil {
-        panic("ERROR: something went wrong when fetching cities. Exiting.")
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     if resp.StatusCode != http.StatusOK {
-        panic("ERROR: API returned wrong response code. Exiting.")
+        return nil, errors.New("ERROR: API returned status code != 200. Exiting.") 
     }
 
     var cities []City
 
     if err := json.NewDecoder(resp.Body).Decode(&cities); err != nil {
-        panic("ERROR: failed to decode cities response body. Exiting.")
+        return nil, err
     }
 
     return cities, nil
