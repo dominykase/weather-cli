@@ -3,47 +3,25 @@ package main
 import (
 	"fmt"
 	"os"
-	"weather/src/cmd"
-	httpclient "weather/src/httpClient"
-	"weather/src/messages"
 	"weather/src/utils"
 )
+
+func handleError(err error) {
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+}
 
 func main() {
     args := os.Args[1:]
    
     command, location, err := utils.ParseCmdArgs(args);
 
-    if err != nil {
-        fmt.Println(err);
-        return
-    }
+    handleError(err)
 
-    switch (command) {
-        case cmd.Exit:
-            fmt.Println(messages.ExitMsg)
-            break
-        case cmd.Help:
-            fmt.Printf(messages.CommandsMsg)
-            break
-        case cmd.Search:
-            cities, err := httpclient.GetCities(location)
-            
-            if err != nil {
-                panic(err)
-            }
+    mode, err := utils.CreateMode(command, location)
+    err = mode.Handle()
 
-            fmt.Println("Found cities:")
-            for _, city := range cities {
-                fmt.Printf("\t%s (%s)\n", city.Name, city.Url)
-            }
-            fmt.Printf("\n")
-            break;
-        case cmd.Daily:
-            break;
-        case cmd.Hourly:
-            break;
-        default:
-            break;
-    }
+    handleError(err)
 }
