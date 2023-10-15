@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"weather/src/cmd"
@@ -11,47 +10,40 @@ import (
 )
 
 func main() {
-    var input string;
-    
-    reader := bufio.NewReader(os.Stdin)
-
-    fmt.Println(messages.WelcomeMsg)
+    args := os.Args[1:]
    
-    for input != "exit" {
-        fmt.Println(messages.CommandsMsg)
-        input, stdinErr := reader.ReadString('\n')
-        
-        if stdinErr != nil {
-            panic("ERROR: something went wrong with input. Exiting.")
-        }
+    command, location, err := utils.ParseCmdArgs(args);
 
-        command, location, err := utils.ParseCmdArgs(input);
+    if err != nil {
+        fmt.Println(err);
+        return
+    }
 
-        if err != nil {
-            fmt.Println(err);
+    switch (command) {
+        case cmd.Exit:
+            fmt.Println(messages.ExitMsg)
+            break
+        case cmd.Help:
+            fmt.Printf(messages.CommandsMsg)
+            break
+        case cmd.Search:
+            cities, err := httpclient.GetCities(location)
+            
+            if err != nil {
+                panic(err)
+            }
 
-            continue;
-        }
-
-        switch (command) {
-            case cmd.Search:
-                cities, err := httpclient.GetCities(location)
-                
-                if err != nil {
-                    panic(err)
-                }
-
-                for _, city := range cities {
-                    fmt.Printf("\t%s (%s)\n", city.Name, city.Url)
-                }
-                fmt.Printf("\n")
-                break;
-            case cmd.Daily:
-                break;
-            case cmd.Hourly:
-                break;
-            default:
-                break;
-        }
+            fmt.Println("Found cities:")
+            for _, city := range cities {
+                fmt.Printf("\t%s (%s)\n", city.Name, city.Url)
+            }
+            fmt.Printf("\n")
+            break;
+        case cmd.Daily:
+            break;
+        case cmd.Hourly:
+            break;
+        default:
+            break;
     }
 }

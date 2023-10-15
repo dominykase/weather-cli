@@ -2,20 +2,25 @@ package utils
 
 import (
 	"errors"
-	"strings"
 	"weather/src/cmd"
 )
 
-func ParseCmdArgs(input string) (command string, location string, err error) {
-    parts := strings.Split(input, " ")
+func ParseCmdArgs(args []string) (command string, location string, err error) {
+    if len(args) == 0 {
+        return cmd.Help, "", nil
+    }
 
-    if len(parts) < 2 {
+    if args[0] == cmd.Exit || args[0] == cmd.Help {
+        return cmd.Exit, "", nil
+    }
+
+    if len(args) < 2 {
         return "", "", errors.New("ERROR: location not entered.") 
     }
     
-    if !cmd.IsValidCmd(parts[0]) {
+    if !cmd.IsValidCmd(args[0]) {
         return "", "", errors.New("ERROR: input does not match any of the available commands.")
     }
 
-    return parts[0], parts[1], nil
+    return args[0], args[1], nil
 }
