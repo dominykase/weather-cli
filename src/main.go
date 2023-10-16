@@ -21,6 +21,9 @@ func main() {
     handleError(err)
 
     mode, err := utils.CreateMode(command, location)
+
+    handleError(err)
+
     err = mode.Handle()
 
     handleError(err)

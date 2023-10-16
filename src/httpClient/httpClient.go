@@ -10,16 +10,6 @@ import (
 
 const BaseUrl = "http://api.weatherapi.com"
 
-type City struct {
-    Id int
-    Name string
-    Region string
-    Country string
-    Lat float64
-    Lon float64
-    Url string
-}
-
 func GetCities(cityInput string) ([]City, error) {
     apiKey := getApiKey()
     resp, err := http.Get(BaseUrl + "/v1/search.json?key=" + apiKey + "&q=" + escapeNewLine(cityInput))
@@ -41,6 +31,29 @@ func GetCities(cityInput string) ([]City, error) {
     }
 
     return cities, nil
+}
+
+func GetDailyForecast(cityInput string) ([]ForecastDay, error) {
+    apiKey := getApiKey()
+    resp, err := http.Get(BaseUrl + "/v1/forecast.json?key=" + apiKey + "&q=" + escapeNewLine(cityInput) + "&days=5&aqi=no&alerts=no")
+
+    if err != nil {
+        return nil, err
+    }
+
+    defer resp.Body.Close()
+
+    if resp.StatusCode != http.StatusOK {
+        return nil, errors.New("ERROR: API returned status code != 200. Exiting.") 
+    }
+
+    var data DailyForecastResponse
+
+    if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+        return nil, err
+    }
+
+    return data.Forecast.Days, nil
 }
 
 func getApiKey() string {
