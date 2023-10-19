@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"weather/src/modes"
 	"weather/src/utils"
 )
 
@@ -20,7 +21,7 @@ func main() {
 
     handleError(err)
 
-    mode, err := utils.CreateMode(command, location)
+    mode, err := modes.CreateMode(command, location)
 
     handleError(err)
 

@@ -37,8 +37,19 @@ type Day struct {
     Uv float64
 }
 
-type DailyForecastResponse struct {
+type ForecastResponse struct {
+    Location LocationData `json:"location"`
     Forecast ForecastData `json:"forecast"`
+}
+
+type LocationData struct {
+    Name string
+    Region string
+    Country string
+    Lat float64
+    Lon float64
+    Timezone string `json:"tz_id"`
+    Localtime string
 }
 
 type ForecastData struct {
@@ -49,5 +60,19 @@ type ForecastDay struct {
     Date string 
     DateEpoch int
     Day Day
+    Hours []ForecastHour `json:"hour"`
+}
+
+type ForecastHour struct {
+    Time string
+    Temp_c float64
+    Condition struct {
+        Text string
+        Icon string
+        Code int
+    }
+    Wind_kph float64
+    Wind_dir string
+    Precip_mm float64
 }
 
