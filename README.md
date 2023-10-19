@@ -12,9 +12,9 @@ Typing in your terminal
 ```
 weather
 ```
-will display all the available commands.
-You can search for cities using `weather search <location>` (e.g. `weather search London`) to find the available cities.
-`weather daily <location>` will display a 5 day weather forecast.
-`weather hourly <location>` will display a 3 day weather forecast hour-by-hour.
-
+will display all the available commands.<br />
++ You can search for cities using `weather search <location>` (e.g. `weather search London`) to find the available cities.<br />
++ `weather daily <location>` will display a 5 day weather forecast.<br />
++ `weather hourly <location>` will display a 3 day weather forecast hour-by-hour.<br />
+<br />
 Have fun!
